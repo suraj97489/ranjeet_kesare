@@ -1,16 +1,11 @@
 import { createClient } from '@/utils/supabase/server'
-import RegistrationForm from './registration-form'
+import RegistrationForm from '@/components/registration-form'
 
-// Revalidate lectures every hour or so, or just dynamic
-export const revalidate = 0 // Don't cache for now to ensure fresh dates
+export const revalidate = 0
 
-export default async function RegisterPage({ params }: { params: { organizer_id: string } }) {
-    const supabase = createClient()
-
-    // Fetch upcoming lectures
-    // We can filter by date >= today if desired, but user said "All CNE dates" (maybe only future ones for nurse?)
-    // Let's just fetch all future ones or all.
-    // "Nurse selects lecture by date"
+export default async function RegisterPage({ params }: { params: Promise<{ organizer_id: string }> }) {
+    const { organizer_id } = await params
+    const supabase = await createClient()
 
     const { data: lectures, error } = await supabase
         .from('lectures')
@@ -23,18 +18,16 @@ export default async function RegisterPage({ params }: { params: { organizer_id:
 
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-            <div className="sm:mx-auto sm:w-full sm:max-w-md">
-                <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+            <div className="sm:mx-auto sm:w-full sm:max-w-md text-center mb-6">
+                <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
                     Nurse Registration
                 </h2>
-                <p className="mt-2 text-center text-sm text-gray-600">
-                    Organizer ID: {params.organizer_id}
+                <p className="mt-2 text-sm text-gray-600">
+                    Organizer ID: <span className="font-mono bg-gray-200 px-1 rounded">{organizer_id}</span>
                 </p>
             </div>
 
-            <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-                <RegistrationForm organizerId={params.organizer_id} lectures={lectures || []} />
-            </div>
+            <RegistrationForm organizerId={organizer_id} lectures={lectures || []} />
         </div>
     )
 }

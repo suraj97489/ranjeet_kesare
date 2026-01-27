@@ -1,44 +1,57 @@
 'use server'
 
-import { revalidatePath } from 'next/cache'
+import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
-import { createClient } from '@/utils/supabase/server'
+
+// Hardcoded organizer credentials
+const ORGANIZERS = [
+    { username: 'ranjeet', password: 'ranjeet@1011', id: 'org_ranjeet_001' },
+    { username: 'organizer2', password: 'organizer@2', id: 'org_organizer2_002' }
+]
 
 export async function login(formData: FormData) {
-    const supabase = createClient()
-
-    // Type-casting here for simplicity, validaton should be better in real app
-    const email = formData.get('email') as string
+    const username = formData.get('username') as string
     const password = formData.get('password') as string
 
-    const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-    })
+    // Find matching organizer
+    const organizer = ORGANIZERS.find(
+        org => org.username === username && org.password === password
+    )
 
-    if (error) {
-        return redirect('/login?error=Could not authenticate user')
+    if (!organizer) {
+        return redirect('/login?error=Invalid username or password')
     }
 
-    revalidatePath('/', 'layout')
+    // Set session cookie
+    const cookieStore = await cookies()
+    cookieStore.set('organizer_session', JSON.stringify({
+        id: organizer.id,
+        username: organizer.username
+    }), {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 60 * 60 * 24 * 7 // 7 days
+    })
+
     redirect('/dashboard')
 }
 
-export async function signup(formData: FormData) {
-    const supabase = createClient()
+export async function logout() {
+    const cookieStore = await cookies()
+    cookieStore.delete('organizer_session')
+    redirect('/login')
+}
 
-    const email = formData.get('email') as string
-    const password = formData.get('password') as string
+export async function getSession() {
+    const cookieStore = await cookies()
+    const session = cookieStore.get('organizer_session')
 
-    const { error } = await supabase.auth.signUp({
-        email,
-        password,
-    })
+    if (!session) return null
 
-    if (error) {
-        return redirect('/login?error=Could not create user')
+    try {
+        return JSON.parse(session.value)
+    } catch {
+        return null
     }
-
-    revalidatePath('/', 'layout')
-    redirect('/dashboard')
 }

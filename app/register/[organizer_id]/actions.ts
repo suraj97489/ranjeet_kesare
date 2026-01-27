@@ -4,7 +4,7 @@ import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 
 export async function submitRegistration(organizerId: string, formData: FormData) {
-    const supabase = createClient()
+    const supabase = await createClient()
 
     const full_name = formData.get('full_name') as string
     const mobile_number = formData.get('mobile_number') as string
@@ -21,8 +21,6 @@ export async function submitRegistration(organizerId: string, formData: FormData
     }
 
     // Insert into DB
-    // Note: We blindly trust organizerId from URL for now, but RLS 'insert' policy is 'true' for anyone.
-    // However, we want to ensure data integrity.
     const { error } = await supabase.from('registrations').insert({
         organizer_id: organizerId,
         full_name,
