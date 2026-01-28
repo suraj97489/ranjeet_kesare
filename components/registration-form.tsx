@@ -47,7 +47,12 @@ export default function RegistrationForm({ organizerId, lectures }: { organizerI
                     </svg>
                 </div>
                 <h2 className="text-2xl font-bold text-green-600 mb-3">Registration Successful!</h2>
-                <p className="text-gray-700 mb-6">Thank you for registering. Your details have been submitted.</p>
+                <p className="text-gray-700 mb-2">
+                    Thank you for registering. Your details have been received for the selected CNE date.
+                </p>
+                <p className="text-sm text-gray-500 mb-6">
+                    You may show this screen at the venue if needed. You can also register another nurse below.
+                </p>
                 <button
                     onClick={() => window.location.reload()}
                     className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition font-medium text-base"
@@ -125,9 +130,11 @@ export default function RegistrationForm({ organizerId, lectures }: { organizerI
                         name="mobile_number"
                         type="tel"
                         required
+                        pattern="^[0-9]{10}$"
                         className="w-full rounded-lg border-gray-300 shadow-sm border p-3 text-base text-black focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        placeholder="1234567890"
+                        placeholder="10-digit mobile number"
                     />
+                    <p className="mt-1 text-xs text-gray-500">Exactly 10 digits, numbers only.</p>
                 </div>
 
                 {/* Email */}
@@ -158,9 +165,11 @@ export default function RegistrationForm({ organizerId, lectures }: { organizerI
                         <input
                             name="uid_number"
                             required
+                            pattern="^[0-9]{12}$"
                             className="w-full rounded-lg border-gray-300 shadow-sm border p-3 text-base text-black focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                            placeholder="1234 5678 9012"
+                            placeholder="12-digit Aadhaar number"
                         />
+                        <p className="mt-1 text-xs text-gray-500">Exactly 12 digits, no spaces.</p>
                     </div>
                 </div>
 

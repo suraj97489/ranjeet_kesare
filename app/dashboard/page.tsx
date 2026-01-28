@@ -51,6 +51,9 @@ export default async function DashboardPage() {
 
             {/* Main Content */}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+                <p className="text-sm text-gray-600 mb-4">
+                    1) Share your registration link with nurses. 2) Add CNE lectures. 3) Track registrations below.
+                </p>
                 {/* Share Link Card */}
                 <ShareLink organizerId={session.id} />
 

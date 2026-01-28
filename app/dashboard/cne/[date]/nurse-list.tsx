@@ -101,8 +101,13 @@ export default function NurseList({ registrations }: { registrations: Registrati
                             </div>
                             <p className="text-gray-500 font-medium">No registrations found</p>
                             <p className="text-sm text-gray-400 mt-1">
-                                {search ? 'Try a different search term' : 'Nurses will appear here once they register'}
+                                {search ? 'Try a different search term' : 'Nurses will appear here once they register using your link.'}
                             </p>
+                            {search && (
+                                <p className="text-xs text-gray-400 mt-2">
+                                    No nurses match “{search}”. Check spelling or try searching by mobile number.
+                                </p>
+                            )}
                         </div>
                     ) : (
                         filtered.map((reg) => (

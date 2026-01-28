@@ -60,6 +60,11 @@ export default function ShareLink({ organizerId }: { organizerId: string }) {
                         )}
                     </button>
                 </div>
+                {copied && (
+                    <p className="mt-2 text-xs text-green-100">
+                        Link copied. Paste it into WhatsApp, SMS, or email to invite nurses.
+                    </p>
+                )}
             </div>
         </div>
     )

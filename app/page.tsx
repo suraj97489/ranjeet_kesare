@@ -21,7 +21,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ o
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex flex-col items-center py-6 sm:py-12 px-4 sm:px-6 lg:px-8">
       {/* Header */}
-      <div className="text-center mb-6 sm:mb-8">
+      <div className="text-center mb-4 sm:mb-6">
         <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-full mb-4 shadow-lg">
           <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -29,14 +29,30 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ o
         </div>
         <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-2">Nurse CNE Registration</h1>
         {organizerId && (
-          <p className="text-sm text-gray-600">
-            Registering with Organizer: <span className="font-mono bg-white px-2 py-1 rounded text-xs">{organizerId}</span>
+          <p className="text-sm text-gray-600 mb-2">
+            Registering with Organizer:{' '}
+            <span className="font-mono bg-white px-2 py-1 rounded text-xs shadow-sm">{organizerId}</span>
           </p>
         )}
+        <p className="text-sm text-gray-600 max-w-md mx-auto">
+          Choose your CNE date, fill in your details and submit. It usually takes less than 2 minutes.
+        </p>
       </div>
 
-      {/* Registration Form */}
-      <RegistrationForm organizerId={organizerId} lectures={lectures || []} />
+      {/* If there are no upcoming lectures, explain clearly */}
+      {(!lectures || lectures.length === 0) ? (
+        <div className="w-full max-w-md mx-auto bg-white p-6 sm:p-8 rounded-2xl shadow-lg border border-gray-100 text-center">
+          <p className="text-base font-semibold text-gray-800 mb-2">No upcoming CNE sessions yet</p>
+          <p className="text-sm text-gray-500 mb-2">
+            The organizer has not added any CNE dates at the moment.
+          </p>
+          <p className="text-xs text-gray-400">
+            Please contact your organizer for the next CNE date or try again later.
+          </p>
+        </div>
+      ) : (
+        <RegistrationForm organizerId={organizerId} lectures={lectures || []} />
+      )}
 
       {/* Footer */}
       <div className="mt-8 pt-6 text-center">

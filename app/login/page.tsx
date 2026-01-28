@@ -72,11 +72,15 @@ export default async function LoginPage({
                         </button>
                     </form>
                 </div>
-
                 {/* Footer */}
-                <p className="text-center text-xs text-gray-500 mt-6">
-                    Secure login for authorized organizers only
-                </p>
+                <div className="mt-6 space-y-1">
+                    <p className="text-center text-xs text-gray-500">
+                        Secure login for authorized organizers only.
+                    </p>
+                    <p className="text-center text-xs text-gray-400">
+                        Use the username and password shared with you. Contact the admin if you are unable to sign in.
+                    </p>
+                </div>
             </div>
         </div>
     )
